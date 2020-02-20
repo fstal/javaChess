@@ -15,7 +15,7 @@ class King extends ChessPiece {
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
 
-        return (x < 2 && y < 2 && 0 < x + y && x + y < 3);
+        return (x < 2 && y < 2 && 0 < x + y);
     }
 }
 
@@ -23,24 +23,23 @@ class King extends ChessPiece {
 class Queen extends ChessPiece {
     static String name = "queen";
 
-
     public Queen(boolean white) {
         super(white, name);
     }
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset
+        if (resetMove(t1, t2)) return false; // or actually reset or deselect piece
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
         int y2 = t2.getYPos();
+        if (x1 == x2 && y1 == y2) return false; // samma som start
 
         int x = Math.abs(x1 - x2);
         int y = Math.abs(y1 - y2);
 
-        if (x1 == x2 && y1 == y2) return false; // samma som start
         return ((x1 == x2 || y1 == y2) || x - y == 0);
     }
 }
@@ -49,14 +48,13 @@ class Queen extends ChessPiece {
 class Knight extends ChessPiece {
     static String name = "knight";
 
-
     public Knight(boolean white) {
         super(white, name);
     }
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset
+        if (resetMove(t1, t2)) return false;
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -121,24 +119,16 @@ class Pawn extends ChessPiece {
 
         int sign = (getIsWhite() ? -1 : 1);
 
-        if (isFirstMove) {
-            return (x1 == x2 && (y2 == y1 + sign || y2 == y1 + 2 * sign));
-        }
-        return false;
+        if(t2.getPiece() == null) { //ingen fiende
+            if (isFirstMove) { // gå rakt i rätt riktning ett eller två
+                return (x1 == x2 && (y2 == y1 + sign || y2 == y1 + 2 * sign));
+            } // gå rakt en ruta
+            else {return  (x1 == x2 && y2 == y1 + sign); }
+        }   // om attack, tillåt diagonal en ruta
+        else { return ((y2 == y1 + sign) && x2 == x1 - 1) || ((y2 == y1 + sign) && x2 == x1 + 1); }
+    }
 
+    public void setIsFirstMove() {
+        this.isFirstMove = false;
     }
 }
-
-/*
-
-class Empty extends ChessPiece {
-    public Empty(boolean white) {
-        super(white, name);
-    }
-
-    @Override
-    public boolean isMoveOk(Tile t1, Tile t2) {
-        return false;
-    }
-}
-*/
