@@ -10,10 +10,6 @@ public abstract class ChessPiece {
         this.name = name;
     }
 
-    public void setWhite(boolean isWhite) {
-        this.white = isWhite;
-    }
-
     public String getName() {
         return this.name;
     }
@@ -31,7 +27,10 @@ public abstract class ChessPiece {
     }
 
     private boolean friendlyFire(Tile t1, Tile t2) {
-        return(t1.getPiece().getIsWhite() == t2.getPiece().getIsWhite()); // if same color > friendlyFire => true
+        if (t1.getPiece() != null &&  t2.getPiece() != null) {
+            return (t1.getPiece().getIsWhite() == t2.getPiece().getIsWhite()); // if same color > friendlyFire => true
+        }
+        return false;
     }
 
     private boolean sameTile (Tile t1, Tile t2) {

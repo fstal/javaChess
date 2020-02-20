@@ -23,7 +23,6 @@ class King extends ChessPiece {
 class Queen extends ChessPiece {
     static String name = "queen";
 
-
     public Queen(boolean white) {
         super(white, name);
     }
@@ -48,7 +47,6 @@ class Queen extends ChessPiece {
 
 class Knight extends ChessPiece {
     static String name = "knight";
-
 
     public Knight(boolean white) {
         super(white, name);
@@ -121,10 +119,12 @@ class Pawn extends ChessPiece {
 
         int sign = (getIsWhite() ? -1 : 1);
 
-        if (isFirstMove) {
-            return (x1 == x2 && (y2 == y1 + sign || y2 == y1 + 2 * sign));
-        }
-        return false;
-
+        if(t2.getPiece() == null) { //ingen fiende
+            if (isFirstMove) { // gå rakt i rätt riktning ett eller två
+                return (x1 == x2 && (y2 == y1 + sign || y2 == y1 + 2 * sign));
+            } // gå rakt en ruta
+            else {return  (x1 == x2 && y2 == y1 + sign); }
+        }   // om attack, tillåt diagonal en ruta
+        else { return ((y2 == y1 + sign) && x2 == x1 - 1) || ((y2 == y1 + sign) && x2 == x1 + 1); }
     }
 }

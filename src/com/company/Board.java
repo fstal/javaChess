@@ -74,7 +74,7 @@ public class Board extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         Tile tile = (Tile) source;
-        game.selectTile(tile);
+        game.clickTile(tile);
     }
 }
 
@@ -90,6 +90,10 @@ class Tile extends JButton {
         this.posY = posY;
         this.piece = piece;
         setColor();
+        updateIcon();
+    }
+
+    void updateIcon() {
         if (this.piece != null) {
             this.setIcon(
                     new ImageIcon(
@@ -97,15 +101,7 @@ class Tile extends JButton {
                                     ? "White"
                                     : "Black")
                                     + ".png"));
-        }
-    }
-
-    int getPosX() {
-        return posX;
-    }
-
-    int getPosY() {
-        return posY;
+        } else this.setIcon(null);
     }
 
     ChessPiece getPiece() {
@@ -114,10 +110,6 @@ class Tile extends JButton {
 
     void setPiece(ChessPiece p) {
         this.piece = p;
-    }
-
-    void getPos() {
-        System.out.println(this.posX + " " + this.posY);
     }
 
     public int getXPos() {
