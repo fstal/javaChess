@@ -6,22 +6,22 @@ public class Game {
 
     private Boolean playerWhite = true;
 
-    Game(){
+    Game() {
         setTheme();
     }
 
-    void selectTile(Tile tile){
-        //System.out.println(tile.getPos());
+    void selectTile(Tile tile) {
         tile.getPos();
-
+        System.out.println(tile.getPiece());
+        System.out.println(this.getClass().getName());
     }
 
-    void endTurn(){
+    void endTurn() {
         playerWhite = !playerWhite;
     }
 
 
-    void setTheme(){
+    void setTheme() {
         //Copied from StackOverflow
 
         try {

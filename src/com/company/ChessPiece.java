@@ -3,13 +3,19 @@ package com.company;
 public abstract class ChessPiece {
     private boolean alive = true;
     private boolean white = true;
+    private String name;
 
-    public ChessPiece(boolean white) {
+    public ChessPiece(boolean white, String name) {
         this.white = white;
+        this.name = name;
     }
 
     public void setWhite(boolean isWhite) {
         this.white = isWhite;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public boolean getIsWhite() {
@@ -25,7 +31,7 @@ public abstract class ChessPiece {
     }
 
     private boolean friendlyFire(Tile t1, Tile t2) {
-        return(t1.getPiece().isWhite == t2.getPiece().isWhite); // if same color > friendlyFire => true
+        return(t1.getPiece().getIsWhite() == t2.getPiece().getIsWhite()); // if same color > friendlyFire => true
     }
 
     private boolean sameTile (Tile t1, Tile t2) {
