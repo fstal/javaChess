@@ -38,5 +38,5 @@ public abstract class ChessPiece {
 
     public abstract boolean isMoveOk(Tile t1, Tile t2);
 
-
 }
+
