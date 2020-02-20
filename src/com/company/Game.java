@@ -43,14 +43,14 @@ public class Game {
         System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos());
 
         ChessPiece piece = t1.getPiece();
-        if(piece.getName() == "pawn") {
+        if(piece.getName().equals("pawn")) {
             handlePawnMove((Pawn) piece);
         }
         t2.setPiece(t1.getPiece()); // Replace or move piece
         t1.setPiece(null);          // Remove tile reference from to piece t1
         t1.updateIcon();            // Update Icons
         t2.updateIcon();
-        //endTurn(); // uncomment to allow change of turns
+        endTurn();
     }
 
     void handlePawnMove(Pawn piece) {
