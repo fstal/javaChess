@@ -17,21 +17,21 @@ public class Game {
         System.out.println("Clicked: " + tile.getXPos() + " " + tile.getYPos());
 
         //no select tile, chosen tile not empty, piece on tile match player turn
-        if(selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
+        if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
             selectedTile = tile;
             System.out.println("Selected tile: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
             System.out.println("With Piece: " + selectedTile.getPiece().getName());
         }
         //has select tile,
-        else if (selectedTile !=null) {
+        else if (selectedTile != null) {
             //selected piece
             ChessPiece selectPiece = selectedTile.getPiece();
             // move for piece to clicked tile is ok
             // includes check for ff and click on self
-            if(selectPiece.isMoveOk(selectedTile, tile)) {
+            if (selectPiece.isMoveOk(selectedTile, tile)) {
                 movePiece(selectedTile, tile);
             }
-
+            selectedTile = null;
         }
     }
 
@@ -40,13 +40,21 @@ public class Game {
     }
 
     void movePiece(Tile t1, Tile t2) {
-        System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos() );
-        t2.setPiece(t1.getPiece());
-        t1.setPiece(null);
-        selectedTile = null;
-        t1.updateIcon();
+        System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos());
+
+        ChessPiece piece = t1.getPiece();
+        if(piece.getName() == "pawn") {
+            handlePawnMove((Pawn) piece);
+        }
+        t2.setPiece(t1.getPiece()); // Replace or move piece
+        t1.setPiece(null);          // Remove tile reference from to piece t1
+        t1.updateIcon();            // Update Icons
         t2.updateIcon();
         //endTurn(); // uncomment to allow change of turns
+    }
+
+    void handlePawnMove(Pawn piece) {
+        piece.setIsFirstMove();
     }
 
     void setTheme() {

@@ -127,4 +127,8 @@ class Pawn extends ChessPiece {
         }   // om attack, tillåt diagonal en ruta
         else { return ((y2 == y1 + sign) && x2 == x1 - 1) || ((y2 == y1 + sign) && x2 == x1 + 1); }
     }
+
+    public void setIsFirstMove() {
+        this.isFirstMove = false;
+    }
 }
