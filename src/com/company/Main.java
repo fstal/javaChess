@@ -1,9 +1,14 @@
 package com.company;
 
+import javax.swing.*;
+
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        Board hej = new Board();
+        Game newGame = new Game();
+        Board board = new Board(newGame);
+
+
     }
 }
