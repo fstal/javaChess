@@ -1,10 +1,11 @@
 package com.company;
 
 
-public class King extends ChessPiece {
+class King extends ChessPiece {
+    static String name = "king";
 
     public King(boolean white) {
-        super(white);
+        super(white, name);
     }
 
     @Override
@@ -19,10 +20,12 @@ public class King extends ChessPiece {
 }
 
 
-public class Queen extends ChessPiece {
+class Queen extends ChessPiece {
+    static String name = "queen";
+
 
     public Queen(boolean white) {
-        super(white);
+        super(white, name);
     }
 
     @Override
@@ -43,10 +46,12 @@ public class Queen extends ChessPiece {
 }
 
 
-public class Knight extends ChessPiece {
+class Knight extends ChessPiece {
+    static String name = "knight";
+
 
     public Knight(boolean white) {
-        super(white);
+        super(white, name);
     }
 
     @Override
@@ -61,10 +66,11 @@ public class Knight extends ChessPiece {
 }
 
 
-public class Bishop extends ChessPiece {
+class Bishop extends ChessPiece {
+    static String name = "bishop";
 
     public Bishop(boolean white) {
-        super(white);
+        super(white, name);
     }
 
     @Override
@@ -78,10 +84,11 @@ public class Bishop extends ChessPiece {
     }
 }
 
-public class Rook extends ChessPiece {
+class Rook extends ChessPiece {
+    static String name = "rook";
 
     public Rook(boolean white) {
-        super(white);
+        super(white, name);
     }
 
     @Override
@@ -95,11 +102,12 @@ public class Rook extends ChessPiece {
     }
 }
 
-public class Pawn extends ChessPiece {
+class Pawn extends ChessPiece {
+    static String name = "pawn";
     boolean isFirstMove = true;
 
     public Pawn(boolean white) {
-        super(white);
+        super(white, name);
     }
 
     @Override
@@ -120,3 +128,17 @@ public class Pawn extends ChessPiece {
 
     }
 }
+
+/*
+
+class Empty extends ChessPiece {
+    public Empty(boolean white) {
+        super(white, name);
+    }
+
+    @Override
+    public boolean isMoveOk(Tile t1, Tile t2) {
+        return false;
+    }
+}
+*/
