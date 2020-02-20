@@ -14,7 +14,10 @@ public class Board extends JFrame implements ActionListener {
     Board(Game game) {
         this.tiles = new Tile[size][size];
         this.game = game;
+        newGame();
+    }
 
+    public void newGame() {
         //Rooks
         tiles[0][0] = new Tile(0, 0, new Rook(false));
         tiles[7][0] = new Tile(7, 0, new Rook(false));
@@ -65,11 +68,6 @@ public class Board extends JFrame implements ActionListener {
         setVisible(true);
         setSize(900, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    }
-
-    public void resetGame() {
-
     }
 
     @Override
@@ -77,9 +75,7 @@ public class Board extends JFrame implements ActionListener {
         Object source = e.getSource();
         Tile tile = (Tile) source;
         game.selectTile(tile);
-        //btn.getPos();
     }
-
 }
 
 
@@ -89,14 +85,18 @@ class Tile extends JButton {
     ChessPiece piece;
     String imgPath = new File("").getAbsolutePath() + "/images/"; //Move to chessPiece class
 
-
     Tile(int posX, int posY, ChessPiece piece) {
         this.posX = posX;
         this.posY = posY;
         this.piece = piece;
         setColor();
         if (this.piece != null) {
-            this.setIcon(new ImageIcon(imgPath + piece.getName() + (piece.getIsWhite() ? "White" : "Black") + ".png")); //Move to chessPiece class
+            this.setIcon(
+                    new ImageIcon(
+                            imgPath + piece.getName() + (piece.getIsWhite()
+                                    ? "White"
+                                    : "Black")
+                                    + ".png"));
         }
     }
 
@@ -118,17 +118,6 @@ class Tile extends JButton {
 
     void getPos() {
         System.out.println(this.posX + " " + this.posY);
-        //getX getY?
-        //[][] with pos?
-
-        /*
-        Change method to?:
-
-        ChessPiece getPiece(){
-            // Return chess piece if there is a piece
-            // Return False if Tile is empty
-
-        }*/
     }
 
     public int getXPos() {
@@ -141,21 +130,11 @@ class Tile extends JButton {
 
 
     void setColor() {
-        //Can probably be made better, but it works for now
         if ((posY % 2) == 0) {
-            if ((posX % 2) != 0) {
-                this.setBackground(Color.GRAY);
-            } else {
-                this.setBackground(Color.WHITE);
-            }
+            this.setBackground(((posX % 2) != 0) ? Color.GRAY : Color.WHITE);
         } else {
-            if ((posX % 2) == 0) {
-                this.setBackground(Color.GRAY);
-            } else {
-                this.setBackground(Color.WHITE);
-            }
+            this.setBackground((posX % 2) == 0 ? Color.GRAY : Color.WHITE);
         }
         this.setOpaque(true);
     }
-
 }
