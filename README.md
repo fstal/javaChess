@@ -1,32 +1,15 @@
 # javaChess
-DDSomething Project
+
+TODO:
+
+* Fix: Attempt to move to already selected tile results in end of turn
+* Feat: Implement path obstruction
+** Feat: Except knights. They can move through units
+* Feat: Implement win conditions
+* Feat: That one special move against pawns, whatever its name was
 
 
-* Ish UML
-
-Vad ska abstrakta ChessPiece-klassen innehålla?
-Color
-Position
-
-abstract:
-movement(position){}
-
-
-Subklasser som ärver av ChessPiece och definierar movement metodbody:
-*Pawn
-** If firstMove:
-**special attack
-
-*Knight
-** Can move over pieces
-
-*Bishop
-*Rook 
-*Queen
-*King
-** Can die => Loss
-
-
+---------
 
 Checks:
 Is tile occupied?
