@@ -18,8 +18,8 @@ Programmet för betyg A ska fungera så här (för C och E implementeras delmän
 1. ~Visa ett schackbräde (rutigt 8x8) med bilder av schackpjäser~
 2. ~Hålla reda på om svart eller vit står på tur att flytta~
 3. ~Utföra drag som begärs av användaren~
-4. Användaren klickar på startruta och slutruta. Om det är ett korrekt (*) drag så utförs det, annars ges felmeddelande.
-5. Kunna reglerna för pjäsernas förflyttningar (men inte föreslå drag, dvs inte spela) och endast utföra korrekta (*) schackdrag.
+4. ~Användaren klickar på startruta och slutruta. Om det är ett korrekt (*) drag så utförs det,~ annars ges felmeddelande.
+5. ~Kunna reglerna för pjäsernas förflyttningar (men inte föreslå drag, dvs inte spela) och endast utföra korrekta (*) schackdrag.~
 6. ~Ta bort slagna pjäser från brädet~
 7. När användaren valt en pjäs att flytta, visa vilka rutor det är möjligt att flytta till, t.ex. genom att ge dem annan färg.
 8. När en bonde når motsatt ände av brädet (motståndarens startände) ska bonden promoveras. Det går bra att bonden alltid blir en dam.
