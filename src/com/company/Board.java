@@ -9,6 +9,7 @@ import java.io.File;
 public class Board extends JFrame implements ActionListener {
     Tile[][] tiles;
     private int size = 8;
+    private JLabel turnLabelWhite, turnLabelBlack;
     Game game;
 
     Board(Game game) {
@@ -63,11 +64,14 @@ public class Board extends JFrame implements ActionListener {
             }
         }
 
-        setLayout(new GridLayout(size, size));
+        setupTurnLabels();
+        setLayout(new GridLayout(size+1, size));
         getContentPane().setBackground(Color.lightGray);
         setVisible(true);
         setSize(900, 900);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Provide Board to Game
+        game.setBoard(this);
     }
 
     @Override
@@ -75,6 +79,28 @@ public class Board extends JFrame implements ActionListener {
         Object source = e.getSource();
         Tile tile = (Tile) source;
         game.clickTile(tile);
+    }
+
+    void setupTurnLabels(){
+        turnLabelWhite = new JLabel("White", SwingConstants.CENTER);
+        turnLabelWhite.setBackground(Color.WHITE);
+        turnLabelWhite.setOpaque(true);
+        turnLabelBlack = new JLabel("Black", SwingConstants.CENTER);
+        turnLabelBlack.setBackground(Color.BLACK);
+        turnLabelBlack.setForeground(Color.WHITE);
+        turnLabelBlack.setOpaque(true);
+        turnLabelBlack.setVisible(false);
+        for(int i = 0; i < 3; i++){
+            //Adding empty labels for style, seriously, this seems to be the prefered way
+            this.add(new JLabel());
+        }
+        this.add(turnLabelWhite);
+        this.add(turnLabelBlack);
+    }
+
+    public void setTurnLabel(Boolean isWhiteTurn){
+        turnLabelWhite.setVisible(isWhiteTurn);
+        turnLabelBlack.setVisible(!isWhiteTurn);
     }
 }
 
