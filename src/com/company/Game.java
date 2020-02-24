@@ -6,6 +6,7 @@ public class Game {
 
     private Boolean isWhiteTurn = true;
     private Tile selectedTile = null;
+    private Board board = null;
 
     Game() {
         setTheme();
@@ -35,8 +36,11 @@ public class Game {
         }
     }
 
+    void setBoard(Board board){this.board = board;}
+
     void endTurn() {
         isWhiteTurn = !isWhiteTurn;
+        board.setTurnLabel(isWhiteTurn);
     }
 
     void movePiece(Tile t1, Tile t2) {
