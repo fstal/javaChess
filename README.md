@@ -6,8 +6,6 @@ TODO:
 * Feat: Implement path obstruction
 ** Feat: Except knights. They can move through units
 * Feat: Implement win conditions
-* Feat: That one special move against pawns, whatever its name was
-
 
 ---------
 
