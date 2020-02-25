@@ -10,7 +10,7 @@ class King extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset
+        if (friendlyFire(t1, t2)) return false; // or actually reset
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -29,7 +29,7 @@ class Queen extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset or deselect piece
+        if (friendlyFire(t1, t2)) return false; // or actually reset or deselect piece
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
@@ -54,7 +54,7 @@ class Knight extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false;
+        if (friendlyFire(t1, t2)) return false;
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -73,7 +73,7 @@ class Bishop extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset
+        if (friendlyFire(t1, t2)) return false; // or actually reset
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -91,7 +91,7 @@ class Rook extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset
+        if (friendlyFire(t1, t2)) return false; // or actually reset
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
@@ -110,7 +110,7 @@ class Pawn extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (resetMove(t1, t2)) return false; // or actually reset
+        if (friendlyFire(t1, t2)) return false; // or actually reset
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
