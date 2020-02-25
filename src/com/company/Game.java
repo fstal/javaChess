@@ -53,7 +53,12 @@ public class Game {
         if (piece.getName().equals("pawn")) {
             handlePawnMove((Pawn) piece);
         }
-        t2.setPiece(t1.getPiece()); // Replace or move piece
+        if(piece.getName().equals("pawn") && (t2.getYPos() == 0 || t2.getYPos() == 7)){
+            promotePawn((Pawn) piece, t2);
+        }
+        else{
+            t2.setPiece(t1.getPiece()); // Replace or move piece
+        }
         t1.setPiece(null);          // Remove tile reference from to piece t1
         t1.updateIcon();            // Update Icons
         t2.updateIcon();
@@ -69,6 +74,10 @@ public class Game {
 
     void handlePawnMove(Pawn piece) {
         piece.setIsFirstMove();
+    }
+
+    void promotePawn(Pawn piece, Tile t2){
+        t2.setPiece(new Queen(piece.getIsWhite()));
     }
 
     void updateSelectedTile(Tile t) {
