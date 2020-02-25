@@ -10,7 +10,7 @@ class King extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (friendlyFire(t1, t2)) return false; // or actually reset
+        if (Game.isNullMove(t1, t2)) return false; // or actually reset
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -29,7 +29,7 @@ class Queen extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (friendlyFire(t1, t2)) return false; // or actually reset or deselect piece
+        if (Game.isNullMove(t1, t2)) return false; // or actually reset or deselect piece
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
@@ -54,7 +54,7 @@ class Knight extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (friendlyFire(t1, t2)) return false;
+        if (Game.isNullMove(t1, t2)) return false;
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -73,7 +73,7 @@ class Bishop extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (friendlyFire(t1, t2)) return false; // or actually reset
+        if (Game.isNullMove(t1, t2)) return false; // or actually reset
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -91,7 +91,7 @@ class Rook extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (friendlyFire(t1, t2)) return false; // or actually reset
+        if (Game.isNullMove(t1, t2)) return false; // or actually reset
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
@@ -110,7 +110,7 @@ class Pawn extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        if (friendlyFire(t1, t2)) return false; // or actually reset
+        if (Game.isNullMove(t1, t2)) return false; // or actually reset
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
@@ -119,13 +119,17 @@ class Pawn extends ChessPiece {
 
         int sign = (getIsWhite() ? -1 : 1);
 
-        if(t2.getPiece() == null) { //ingen fiende
-            if (isFirstMove) { // gå rakt i rätt riktning ett eller två
+        if (t2.getPiece() == null) { // no enemy
+            if (isFirstMove) { // move straight one or two steps in the correct direction
                 return (x1 == x2 && (y2 == y1 + sign || y2 == y1 + 2 * sign));
-            } // gå rakt en ruta
-            else {return  (x1 == x2 && y2 == y1 + sign); }
-        }   // om attack, tillåt diagonal en ruta
-        else { return ((y2 == y1 + sign) && x2 == x1 - 1) || ((y2 == y1 + sign) && x2 == x1 + 1); }
+            } // move straight one step
+            else {
+                return (x1 == x2 && y2 == y1 + sign);
+            }
+        }   // if attack, allow diagonal move
+        else {
+            return ((y2 == y1 + sign) && x2 == x1 - 1) || ((y2 == y1 + sign) && x2 == x1 + 1);
+        }
     }
 
     public void setIsFirstMove() {

@@ -13,7 +13,6 @@ public class Game {
     }
 
     void clickTile(Tile tile) {
-
         System.out.println("Clicked: " + tile.getXPos() + " " + tile.getYPos());
 
         //no select tile, chosen tile not empty, piece on tile match player turn
@@ -22,9 +21,9 @@ public class Game {
             System.out.println("SelectedTile is now: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
             System.out.println("With the piece: " + selectedTile.getPiece().getName());
         }
-        //has select tile,
+        //has select tile
         else if (selectedTile != null) {
-            //selected piece
+            // get selected piece
             ChessPiece selectPiece = selectedTile.getPiece();
             // move for piece to clicked tile is ok
             // includes check for ff and click on self
@@ -55,6 +54,13 @@ public class Game {
         t1.updateIcon();            // Update Icons
         t2.updateIcon();
         endTurn();
+    }
+
+    public static boolean isNullMove(Tile t1, Tile t2) {         // Also checks for null moves
+        if (t1.getPiece() != null && t2.getPiece() != null) {
+            return (t1.getPiece().getIsWhite() == t2.getPiece().getIsWhite()); // if same color => friendly fire/null move => true
+        }
+        return false;
     }
 
     void handlePawnMove(Pawn piece) {
