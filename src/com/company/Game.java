@@ -17,7 +17,8 @@ public class Game {
 
         //no select tile, chosen tile not empty, piece on tile match player turn
         if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
-            selectedTile = tile;
+            updateSelectedTile(tile);
+            //selectedTile = tile;
             System.out.println("SelectedTile is now: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
             System.out.println("With the piece: " + selectedTile.getPiece().getName());
         }
@@ -30,7 +31,8 @@ public class Game {
             if (selectPiece.isMoveOk(selectedTile, tile)) {
                 movePiece(selectedTile, tile);
             }
-            selectedTile = null;
+            updateSelectedTile(null);
+            //selectedTile = null;
             System.out.println("SelectedTile is now reset (null)");
         }
     }
@@ -65,6 +67,15 @@ public class Game {
 
     void handlePawnMove(Pawn piece) {
         piece.setIsFirstMove();
+    }
+
+    void updateSelectedTile(Tile t) {
+        if (t != null) {
+            t.markSelected();
+        } else {
+            selectedTile.unmarkSelected();
+        }
+        selectedTile = t;
     }
 
     void setTheme() {

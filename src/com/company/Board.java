@@ -130,6 +130,14 @@ class Tile extends JButton {
         } else this.setIcon(null);
     }
 
+    void markSelected() {
+        this.setBackground(Color.YELLOW);
+    }
+
+    void unmarkSelected() {
+        this.setColor();
+    }
+
     ChessPiece getPiece() {
         return piece;
     }
