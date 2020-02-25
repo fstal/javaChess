@@ -14,14 +14,13 @@ public class Game {
 
     void clickTile(Tile tile) {
 
-        System.out.println("SelectTile: " + selectedTile);
         System.out.println("Clicked: " + tile.getXPos() + " " + tile.getYPos());
 
         //no select tile, chosen tile not empty, piece on tile match player turn
         if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
             selectedTile = tile;
-            System.out.println("Selected tile: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
-            System.out.println("With Piece: " + selectedTile.getPiece().getName());
+            System.out.println("SelectedTile is now: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
+            System.out.println("With the piece: " + selectedTile.getPiece().getName());
         }
         //has select tile,
         else if (selectedTile != null) {
@@ -33,6 +32,7 @@ public class Game {
                 movePiece(selectedTile, tile);
             }
             selectedTile = null;
+            System.out.println("SelectedTile is now reset (null)");
         }
     }
 
