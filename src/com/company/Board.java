@@ -8,7 +8,7 @@ import java.io.File;
 
 public class Board extends JFrame implements ActionListener {
     Tile[][] tiles;
-    private int size = 8;
+    static int size = 8;
     private JLabel turnLabelWhite, turnLabelBlack;
     Game game;
 
@@ -115,7 +115,7 @@ class Tile extends JButton {
         this.posX = posX;
         this.posY = posY;
         this.piece = piece;
-        setColor();
+        setDefaultColor();
         updateIcon();
     }
 
@@ -128,6 +128,18 @@ class Tile extends JButton {
                                     : "Black")
                                     + ".png"));
         } else this.setIcon(null);
+    }
+
+    void markPossibleMove() {
+        this.setBackground(Color.GREEN);
+    }
+
+    void markSelected() {
+        this.setBackground(Color.YELLOW);
+    }
+
+    void unmarkSelected() {
+        this.setDefaultColor();
     }
 
     ChessPiece getPiece() {
@@ -146,8 +158,7 @@ class Tile extends JButton {
         return posY;
     }
 
-
-    void setColor() {
+    void setDefaultColor() { //Rename to "setDefaultColor"?
         if ((posY % 2) == 0) {
             this.setBackground(((posX % 2) != 0) ? Color.GRAY : Color.WHITE);
         } else {

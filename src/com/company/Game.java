@@ -17,7 +17,8 @@ public class Game {
 
         //no select tile, chosen tile not empty, piece on tile match player turn
         if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
-            selectedTile = tile;
+            updateSelectedTile(tile);
+            //selectedTile = tile;
             System.out.println("SelectedTile is now: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
             System.out.println("With the piece: " + selectedTile.getPiece().getName());
         }
@@ -30,12 +31,15 @@ public class Game {
             if (selectPiece.isMoveOk(selectedTile, tile)) {
                 movePiece(selectedTile, tile);
             }
-            selectedTile = null;
+            updateSelectedTile(null);
+            //selectedTile = null;
             System.out.println("SelectedTile is now reset (null)");
         }
     }
 
-    void setBoard(Board board){this.board = board;}
+    void setBoard(Board board) {
+        this.board = board;
+    }
 
     void endTurn() {
         isWhiteTurn = !isWhiteTurn;
@@ -46,7 +50,7 @@ public class Game {
         System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos());
 
         ChessPiece piece = t1.getPiece();
-        if(piece.getName().equals("pawn")) {
+        if (piece.getName().equals("pawn")) {
             handlePawnMove((Pawn) piece);
         }
         t2.setPiece(t1.getPiece()); // Replace or move piece
@@ -65,6 +69,33 @@ public class Game {
 
     void handlePawnMove(Pawn piece) {
         piece.setIsFirstMove();
+    }
+
+    void updateSelectedTile(Tile t) {
+        if (t != null) {
+            t.markSelected();
+            updatePossibleMoves(t, true);
+        } else {
+            selectedTile.unmarkSelected();
+            updatePossibleMoves(t, false);
+        }
+        selectedTile = t;
+    }
+
+    void updatePossibleMoves(Tile t, boolean b) {
+        for (int y = 0; y < board.size; y++) {
+            for (int x = 0; x < board.size; x++) {
+                Tile toTile = board.tiles[x][y];
+                if (b) {
+                    ChessPiece piece = t.getPiece();
+                    if (piece.isMoveOk(t, toTile)) {
+                        toTile.markPossibleMove();
+                    }
+                } else {
+                    toTile.setDefaultColor();
+                }
+            }
+        }
     }
 
     void setTheme() {
