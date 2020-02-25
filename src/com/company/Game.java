@@ -37,7 +37,9 @@ public class Game {
         }
     }
 
-    void setBoard(Board board){this.board = board;}
+    void setBoard(Board board) {
+        this.board = board;
+    }
 
     void endTurn() {
         isWhiteTurn = !isWhiteTurn;
@@ -48,7 +50,7 @@ public class Game {
         System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos());
 
         ChessPiece piece = t1.getPiece();
-        if(piece.getName().equals("pawn")) {
+        if (piece.getName().equals("pawn")) {
             handlePawnMove((Pawn) piece);
         }
         t2.setPiece(t1.getPiece()); // Replace or move piece
@@ -72,10 +74,28 @@ public class Game {
     void updateSelectedTile(Tile t) {
         if (t != null) {
             t.markSelected();
+            updatePossibleMoves(t, true);
         } else {
             selectedTile.unmarkSelected();
+            updatePossibleMoves(t, false);
         }
         selectedTile = t;
+    }
+
+    void updatePossibleMoves(Tile t, boolean b) {
+        for (int y = 0; y < board.size; y++) {
+            for (int x = 0; x < board.size; x++) {
+                Tile toTile = board.tiles[x][y];
+                if (b) {
+                    ChessPiece piece = t.getPiece();
+                    if (piece.isMoveOk(t, toTile)) {
+                        toTile.markPossibleMove();
+                    }
+                } else {
+                    toTile.setDefaultColor();
+                }
+            }
+        }
     }
 
     void setTheme() {
