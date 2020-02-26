@@ -40,6 +40,8 @@ class Queen extends ChessPiece {
         int x = Math.abs(x1 - x2);
         int y = Math.abs(y1 - y2);
 
+        //if(!this.obstructedMove(t1, t2)) return false;
+
         return ((x1 == x2 || y1 == y2) || x - y == 0);
     }
 }

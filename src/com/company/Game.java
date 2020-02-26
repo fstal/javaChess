@@ -13,14 +13,14 @@ public class Game {
     }
 
     void clickTile(Tile tile) {
-        System.out.println("Clicked: " + tile.getXPos() + " " + tile.getYPos());
+        //System.out.println("Clicked: " + tile.getXPos() + " " + tile.getYPos());
 
         //no select tile, chosen tile not empty, piece on tile match player turn
         if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
             updateSelectedTile(tile);
             //selectedTile = tile;
-            System.out.println("SelectedTile is now: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
-            System.out.println("With the piece: " + selectedTile.getPiece().getName());
+            //System.out.println("SelectedTile is now: " + selectedTile.getXPos() + " " + selectedTile.getYPos());
+            //System.out.println("With the piece: " + selectedTile.getPiece().getName());
         }
         //has select tile
         else if (selectedTile != null) {
@@ -33,7 +33,7 @@ public class Game {
             }
             updateSelectedTile(null);
             //selectedTile = null;
-            System.out.println("SelectedTile is now reset (null)");
+            //System.out.println("SelectedTile is now reset (null)");
         }
     }
 
@@ -47,7 +47,7 @@ public class Game {
     }
 
     void movePiece(Tile t1, Tile t2) {
-        System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos());
+        //System.out.println("Moved " + t1.getXPos() + " " + t1.getYPos() + " to => " + t2.getXPos() + " " + t2.getYPos());
 
         ChessPiece piece = t1.getPiece();
         if (piece.getName().equals("pawn")) {
@@ -98,13 +98,140 @@ public class Game {
                 if (b) {
                     ChessPiece piece = t.getPiece();
                     if (piece.isMoveOk(t, toTile)) {
-                        toTile.markPossibleMove();
+                        if(obstructedMove(t, toTile)){
+                            toTile.markPossibleMove();
+                        }
                     }
                 } else {
                     toTile.setDefaultColor();
                 }
             }
         }
+    }
+
+    public boolean obstructedMove(Tile t1, Tile t2){
+        int x1 = t1.getXPos();
+        int x2 = t2.getXPos();
+        int y1 = t1.getYPos();
+        int y2 = t2.getYPos();
+        ChessPiece piece = t1.getPiece();
+        int enemyCount = 0; //If we have more than one enemy -> return false
+
+        int diffHor = (t2.getXPos() - t1.getXPos());
+        int diffVert = (t2.getYPos() - t1.getYPos());
+
+        if(x1 == x2){
+            //Check N
+            for(int i = y2; i < y1; i++){
+                Tile checkTile = board.tiles[x1][i];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+
+            //Check S
+            for(int i = y2; i > y1; i--){
+                Tile checkTile = board.tiles[x1][i];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+        }
+
+        if(y1 == y2){
+            //Check W
+            for(int i = x2; i < x1; i++){
+                Tile checkTile = board.tiles[i][y1];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+            //Check E
+            for(int i = x2; i > x1; i--){
+                Tile checkTile = board.tiles[i][y1];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+        }
+
+        if(diffVert > 0 && diffHor > 0  ){
+            //Check SE
+            for(int i = x2, j = y2; i > x1 && j > y1; i--, j--){
+                System.out.println("SE " + x2 + " " + y2 );
+                Tile checkTile = board.tiles[i][j];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+        }
+
+        if(diffHor < 0 && diffVert < 0){
+            //Check NW
+            for(int i = x2, j = y2; i < x1 && j < y1; i++, j++){
+                System.out.println("NW " + x2 + " " + y2 );
+                Tile checkTile = board.tiles[i][j];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+        }
+
+        if(diffHor > 0 && diffVert < 0){
+            //Check NE
+            for(int i = x2, j = y2; i > x1 && j < y1; i--, j++){
+                System.out.println("NW " + x2 + " " + y2 );
+                Tile checkTile = board.tiles[i][j];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+        }
+
+        if(diffHor < 0 && diffVert > 0){
+            //Check SW
+            for(int i = x2, j = y2; i < x1 && j > y1; i++, j--){
+                System.out.println("NW " + x2 + " " + y2 );
+                Tile checkTile = board.tiles[i][j];
+                if(!piece.isMoveOk(t1, checkTile)){
+                    return false;
+                }
+                if(countEnemy(t1, checkTile)){
+                    enemyCount++;
+                }
+            }
+        }
+
+        return enemyCount <= 1;  //if all else has gone through and enemycount <= 1 -> return True
+    }
+
+    boolean countEnemy(Tile t1, Tile checkTile){
+        //obstructedMove helper-function
+        if(checkTile.getPiece() != null) {
+            return checkTile.getPiece().getIsWhite() != t1.getPiece().getIsWhite();
+        }
+        return false;
     }
 
     void setTheme() {
