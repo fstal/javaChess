@@ -49,13 +49,6 @@ public class Game {
         endTurn();
     }
 
-    public static boolean isFriendly(Tile t1, Tile t2) {
-        if (t2.getPiece() != null) {
-            return (t1.getPiece().getIsWhite() == t2.getPiece().getIsWhite());
-        }
-        return false;
-    }
-
     void handlePawnMove(Tile t2, Pawn piece) {
         //  setIsFirstMove Could be called in isMoveOk for Pawn, would result in multiple lines of code tho *shrug*
         piece.setIsFirstMove();
@@ -96,6 +89,8 @@ public class Game {
     public boolean obstructedMove(Tile t1, Tile t2) {
         //Checks if move is obstructed. Always starts at t2 and checks all Tiles towards t1
         //Knight will always get true from obstructedMove since it doesn't fit if-conditions
+        if (isFriendly(t1, t2)) return false;  //Early return for optimization *shrug*
+
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
@@ -106,18 +101,16 @@ public class Game {
         int diffHor = (t2.getXPos() - t1.getXPos());
         int diffVert = (t2.getYPos() - t1.getYPos());
 
-        if (isFriendly(t1, t2)) return false;  //Borde flyttas ut, hör inte hit?
-
         if (x1 == x2) {
             //Check N
             for (int i = y2; i < y1; i++) {
                 Tile checkTile = board.tiles[x1][i];
-                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) {
-                    return false;
-                }
-                if (isEnemy(t1, checkTile)) {
-                    enemy = checkTile;
-                }
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) {      //From here
+                    return false;                   // Code between is same for every case
+                }                                   // Can we split this logic to a function?
+                if (isEnemy(t1, checkTile)) {        // Would reduce a lot of code
+                    enemy = checkTile;               // Still need to be able to set enemy tho
+                }                                                                       // To here
 
             }
 
@@ -208,10 +201,17 @@ public class Game {
             }
         }
 
-        if (enemy != null) { //If we have an enemy, and the enemy is not on the move-to tile, return false.
+        if (enemy != null) { // If we have an enemy, and the enemy is not on the move-to tile, return false.
             return enemy.getYPos() == t2.getYPos() && enemy.getXPos() == t2.getXPos();
         }
         return true;
+    }
+
+    public static boolean isFriendly(Tile t1, Tile t2) {        // Both isFriendly() and isEnemy() necessary as it can also be null. isFriendly() != isEnemy()
+        if (t2.getPiece() != null) {
+            return (t1.getPiece().getIsWhite() == t2.getPiece().getIsWhite());
+        }
+        return false;
     }
 
     boolean isEnemy(Tile t1, Tile checkTile) {
@@ -239,7 +239,7 @@ public class Game {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
-                System.out.println(ex);
+                ex.printStackTrace();
             }
         }
     }
