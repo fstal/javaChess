@@ -12,20 +12,6 @@ public class Game {
         setTheme();
     }
 
-    void clickTile(Tile tile) {
-        //no select tile, chosen tile not empty, piece on tile match player turn
-        if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
-            updateSelectedTile(tile);
-        }
-        //has select tile
-        else if (selectedTile != null) {
-            if (obstructedMove(selectedTile, tile)) {
-                movePiece(selectedTile, tile);
-            }
-            updateSelectedTile(null);
-        }
-    }
-
     void setBoard(Board board) {
         this.board = board;
     }
@@ -35,14 +21,30 @@ public class Game {
         board.setTurnLabel(isWhiteTurn);
     }
 
+    void clickTile(Tile tile) {
+        //no select tile, chosen tile not empty, piece on tile match player turn
+        if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
+            updateSelectedTile(tile);
+        }
+        //has a selected tile
+        else if (selectedTile != null) {
+            if (obstructedMove(selectedTile, tile)) {
+                movePiece(selectedTile, tile);
+            }
+            updateSelectedTile(null);
+        }
+    }
+
     void movePiece(Tile t1, Tile t2) {
         ChessPiece piece = t1.getPiece();
         if (piece.getName().equals("pawn")) {
             handlePawnMove(t2, (Pawn) piece);
         }
-        t2.setPiece(t1.getPiece()); // Replace or move piece
-        t1.setPiece(null);          // Remove tile reference from to piece t1
-        t1.updateIcon();            // Update Icons
+        else {
+            t2.setPiece(t1.getPiece());
+        }
+        t1.setPiece(null);
+        t1.updateIcon();
         t2.updateIcon();
         endTurn();
     }
@@ -55,14 +57,13 @@ public class Game {
     }
 
     void handlePawnMove(Tile t2, Pawn piece) {
+        //  setIsFirstMove Could be called in isMoveOk for Pawn, would result in multiple lines of code tho *shrug*
         piece.setIsFirstMove();
-        if (t2.getYPos() == 0 || t2.getYPos() == 7) {
+        if (t2.getYPos() == 0 || t2.getYPos() == 7) {   // Pawn promotion
             promotePawn(piece, t2);
+        } else {
+            t2.setPiece(piece);
         }
-    }
-
-    void promotePawn(Pawn piece, Tile t2) {
-        t2.setPiece(new Queen(piece.getIsWhite()));
     }
 
     void updateSelectedTile(Tile t) {
@@ -83,7 +84,7 @@ public class Game {
                 if (b) {
                     ChessPiece piece = t.getPiece();
                     if (piece.isMoveOk(t, toTile) && !isFriendly(t, toTile) && obstructedMove(t, toTile)) {
-                            toTile.markPossibleMove();
+                        toTile.markPossibleMove();
                     }
                 } else {
                     toTile.setDefaultColor();
@@ -128,7 +129,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
         }
 
         if (y1 == y2) {
@@ -140,7 +142,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
             //Check E
             for (int i = x2; i > x1; i--) {
                 Tile checkTile = board.tiles[i][y1];
@@ -149,7 +152,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
         }
 
         if (diffVert > 0 && diffHor > 0) {
@@ -161,7 +165,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
         }
 
         if (diffHor < 0 && diffVert < 0) {
@@ -173,7 +178,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
         }
 
         if (diffHor > 0 && diffVert < 0) {
@@ -185,7 +191,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
         }
 
         if (diffHor < 0 && diffVert > 0) {
@@ -197,7 +204,8 @@ public class Game {
                 }
                 if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }            }
+                }
+            }
         }
 
         if (enemy != null) { //If we have an enemy, and the enemy is not on the move-to tile, return false.
@@ -211,6 +219,10 @@ public class Game {
             return checkTile.getPiece().getIsWhite() != t1.getPiece().getIsWhite();
         }
         return false;
+    }
+
+    void promotePawn(Pawn piece, Tile t2) {
+        t2.setPiece(new Queen(piece.getIsWhite()));
     }
 
     void setTheme() {

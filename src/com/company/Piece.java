@@ -12,7 +12,6 @@ class King extends ChessPiece {
     public boolean isMoveOk(Tile t1, Tile t2) {
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
-
         return (x < 2 && y < 2 && 0 < x + y);
     }
 }
@@ -31,11 +30,8 @@ class Queen extends ChessPiece {
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
         int y2 = t2.getYPos();
-        if (x1 == x2 && y1 == y2) return false; // samma som start
-
         int x = Math.abs(x1 - x2);
         int y = Math.abs(y1 - y2);
-
         return ((x1 == x2 || y1 == y2) || x - y == 0);
     }
 }
@@ -52,7 +48,6 @@ class Knight extends ChessPiece {
     public boolean isMoveOk(Tile t1, Tile t2) {
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
-
         return (x * y == 2);
     }
 }
@@ -69,7 +64,6 @@ class Bishop extends ChessPiece {
     public boolean isMoveOk(Tile t1, Tile t2) {
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
-
         return (x - y == 0);
     }
 }
@@ -83,11 +77,7 @@ class Rook extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        int x1 = t1.getXPos();
-        int x2 = t2.getXPos();
-        int y1 = t1.getYPos();
-        int y2 = t2.getYPos();
-        return (x1 == x2 || y1 == y2);
+        return (t1.getXPos() == t2.getXPos() || t1.getYPos() == t2.getYPos());
     }
 }
 
@@ -105,7 +95,6 @@ class Pawn extends ChessPiece {
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
         int y2 = t2.getYPos();
-
         int sign = (getIsWhite() ? -1 : 1);
 
         if (t2.getPiece() == null) { // no enemy

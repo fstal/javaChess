@@ -65,7 +65,7 @@ public class Board extends JFrame implements ActionListener {
         }
 
         setupTurnLabels();
-        setLayout(new GridLayout(size+1, size));
+        setLayout(new GridLayout(size + 1, size));
         getContentPane().setBackground(Color.lightGray);
         setVisible(true);
         setSize(900, 900);
@@ -76,12 +76,10 @@ public class Board extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object source = e.getSource();
-        Tile tile = (Tile) source;
-        game.clickTile(tile);
+        game.clickTile((Tile) e.getSource());
     }
 
-    void setupTurnLabels(){
+    void setupTurnLabels() {
         turnLabelWhite = new JLabel("White", SwingConstants.CENTER);
         turnLabelWhite.setBackground(Color.WHITE);
         turnLabelWhite.setOpaque(true);
@@ -90,7 +88,7 @@ public class Board extends JFrame implements ActionListener {
         turnLabelBlack.setForeground(Color.WHITE);
         turnLabelBlack.setOpaque(true);
         turnLabelBlack.setVisible(false);
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             //Adding empty labels for style, seriously, this seems to be the prefered way
             this.add(new JLabel());
         }
@@ -98,7 +96,7 @@ public class Board extends JFrame implements ActionListener {
         this.add(turnLabelBlack);
     }
 
-    public void setTurnLabel(Boolean isWhiteTurn){
+    public void setTurnLabel(Boolean isWhiteTurn) {
         turnLabelWhite.setVisible(isWhiteTurn);
         turnLabelBlack.setVisible(!isWhiteTurn);
     }
