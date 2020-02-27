@@ -3,8 +3,6 @@
 TODO:
 
 * Fix: Attempt to move to already selected tile results in end of turn
-* Feat: Implement path obstruction
-** Feat: Except knights. They can move through units
 * Feat: Implement win conditions
 
 ---------

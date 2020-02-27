@@ -28,7 +28,10 @@ public class Game {
             ChessPiece selectPiece = selectedTile.getPiece();
             // move for piece to clicked tile is ok
             // includes check for ff and click on self
-            if (selectPiece.isMoveOk(selectedTile, tile)) {
+            /*if (selectPiece.isMoveOk(selectedTile, tile)) {
+                movePiece(selectedTile, tile);
+            }*/
+            if (obstructedMove(selectedTile, tile)) {
                 movePiece(selectedTile, tile);
             }
             updateSelectedTile(null);
@@ -110,15 +113,19 @@ public class Game {
     }
 
     public boolean obstructedMove(Tile t1, Tile t2){
+        //Checks if move is obstructed. Always starts at t2 and checks all Tiles towards t1
+        //Knight will always get true from obstructedMove since it doesn't fit if-conditions
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
         int y2 = t2.getYPos();
         ChessPiece piece = t1.getPiece();
-        int enemyCount = 0; //If we have more than one enemy -> return false
+        Tile enemy = null;
 
         int diffHor = (t2.getXPos() - t1.getXPos());
         int diffVert = (t2.getYPos() - t1.getYPos());
+
+        if(isNullMove(t1, t2)) return false; //Checking for null-move here instead of in isMoveOk()
 
         if(x1 == x2){
             //Check N
@@ -127,8 +134,8 @@ public class Game {
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
 
@@ -138,8 +145,8 @@ public class Game {
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
         }
@@ -151,8 +158,8 @@ public class Game {
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
             //Check E
@@ -161,8 +168,8 @@ public class Game {
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
         }
@@ -170,13 +177,12 @@ public class Game {
         if(diffVert > 0 && diffHor > 0  ){
             //Check SE
             for(int i = x2, j = y2; i > x1 && j > y1; i--, j--){
-                System.out.println("SE " + x2 + " " + y2 );
                 Tile checkTile = board.tiles[i][j];
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
         }
@@ -184,13 +190,12 @@ public class Game {
         if(diffHor < 0 && diffVert < 0){
             //Check NW
             for(int i = x2, j = y2; i < x1 && j < y1; i++, j++){
-                System.out.println("NW " + x2 + " " + y2 );
                 Tile checkTile = board.tiles[i][j];
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
         }
@@ -198,13 +203,12 @@ public class Game {
         if(diffHor > 0 && diffVert < 0){
             //Check NE
             for(int i = x2, j = y2; i > x1 && j < y1; i--, j++){
-                System.out.println("NW " + x2 + " " + y2 );
                 Tile checkTile = board.tiles[i][j];
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
         }
@@ -212,22 +216,25 @@ public class Game {
         if(diffHor < 0 && diffVert > 0){
             //Check SW
             for(int i = x2, j = y2; i < x1 && j > y1; i++, j--){
-                System.out.println("NW " + x2 + " " + y2 );
                 Tile checkTile = board.tiles[i][j];
                 if(!piece.isMoveOk(t1, checkTile)){
                     return false;
                 }
-                if(countEnemy(t1, checkTile)){
-                    enemyCount++;
+                if(checkEnemy(t1, checkTile)){
+                    enemy = checkTile;
                 }
             }
         }
 
-        return enemyCount <= 1;  //if all else has gone through and enemycount <= 1 -> return True
+        if(enemy != null){ //If we have an enemy, and the enemy is not on the move-to tile, return false.
+            return enemy.getYPos() == t2.getYPos() && enemy.getXPos() == t2.getXPos();
+        }
+        return true;
     }
 
-    boolean countEnemy(Tile t1, Tile checkTile){
-        //obstructedMove helper-function
+    boolean checkEnemy(Tile t1, Tile checkTile){
+        //ObstructedMove helper-function. Checks if Tile is an enemy
+        //Could probably use "isNullMove()", but that might be hard to understand as reader
         if(checkTile.getPiece() != null) {
             return checkTile.getPiece().getIsWhite() != t1.getPiece().getIsWhite();
         }
@@ -248,7 +255,6 @@ public class Game {
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
             } catch (Exception ex) {
-                // not worth my time
             }
         }
     }
