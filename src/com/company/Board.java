@@ -8,7 +8,7 @@ import java.io.File;
 
 public class Board extends JFrame implements ActionListener {
     Tile[][] tiles;
-    static int size = 8;
+    int size = 8;
     private JLabel turnLabelWhite, turnLabelBlack;
     Game game;
 

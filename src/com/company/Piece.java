@@ -10,7 +10,7 @@ class King extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        //if (Game.isNullMove(t1, t2)) return false; // or actually reset
+        if (Game.isFriendly(t1, t2)) return false; // or actually reset
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -29,7 +29,7 @@ class Queen extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        //if (Game.isNullMove(t1, t2)) return false; // or actually reset or deselect piece
+        if (Game.isFriendly(t1, t2)) return false; // or actually reset or deselect piece
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
@@ -39,8 +39,6 @@ class Queen extends ChessPiece {
 
         int x = Math.abs(x1 - x2);
         int y = Math.abs(y1 - y2);
-
-        //if(!this.obstructedMove(t1, t2)) return false;
 
         return ((x1 == x2 || y1 == y2) || x - y == 0);
     }
@@ -56,7 +54,7 @@ class Knight extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        //if (Game.isNullMove(t1, t2)) return false;
+        if (Game.isFriendly(t1, t2)) return false;
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -75,7 +73,7 @@ class Bishop extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        //if (Game.isNullMove(t1, t2)) return false; // or actually reset
+        if (Game.isFriendly(t1, t2)) return false; // or actually reset
 
         int x = Math.abs(t1.getXPos() - t2.getXPos());
         int y = Math.abs(t1.getYPos() - t2.getYPos());
@@ -93,7 +91,7 @@ class Rook extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        //if (Game.isNullMove(t1, t2)) return false; // or actually reset
+        //if (Game.isFriendly(t1, t2)) return false; // or actually reset
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();
         int y1 = t1.getYPos();
@@ -112,7 +110,7 @@ class Pawn extends ChessPiece {
 
     @Override
     public boolean isMoveOk(Tile t1, Tile t2) {
-        //if (Game.isNullMove(t1, t2)) return false; // or actually reset
+        if (Game.isFriendly(t1, t2)) return false; // or actually reset
 
         int x1 = t1.getXPos();
         int x2 = t2.getXPos();

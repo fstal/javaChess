@@ -1,6 +1,6 @@
 package com.company;
 
-public abstract class ChessPiece extends Game{
+public abstract class ChessPiece extends Game {
     private boolean white;
     private String name;
     //private Game game;
