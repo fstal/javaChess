@@ -8,13 +8,14 @@ public class Game {
     private Tile selectedTile = null;
     private Board board = null;
 
-    Game() { setTheme(); }
+    Game() {
+        setTheme();
+    }
 
     void clickTile(Tile tile) {
         //no select tile, chosen tile not empty, piece on tile match player turn
         if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
             updateSelectedTile(tile);
-            System.out.println(selectedTile.getPiece());
         }
         //has select tile
         else if (selectedTile != null) {
@@ -53,7 +54,7 @@ public class Game {
         return false;
     }
 
-    void handlePawnMove(Tile t2,Pawn piece) {
+    void handlePawnMove(Tile t2, Pawn piece) {
         piece.setIsFirstMove();
         if (t2.getYPos() == 0 || t2.getYPos() == 7) {
             promotePawn(piece, t2);
@@ -81,10 +82,8 @@ public class Game {
                 Tile toTile = board.tiles[x][y];
                 if (b) {
                     ChessPiece piece = t.getPiece();
-                    if (piece.isMoveOk(t, toTile)) {
-                        if (obstructedMove(t, toTile)) {
+                    if (piece.isMoveOk(t, toTile) && !isFriendly(t, toTile) && obstructedMove(t, toTile)) {
                             toTile.markPossibleMove();
-                        }
                     }
                 } else {
                     toTile.setDefaultColor();
@@ -106,105 +105,99 @@ public class Game {
         int diffHor = (t2.getXPos() - t1.getXPos());
         int diffVert = (t2.getYPos() - t1.getYPos());
 
-        if (isFriendly(t1, t2)) return false; //Checking for null-move here instead of in isMoveOk()
+        if (isFriendly(t1, t2)) return false;  //Borde flyttas ut, hör inte hit?
 
         if (x1 == x2) {
             //Check N
             for (int i = y2; i < y1; i++) {
                 Tile checkTile = board.tiles[x1][i];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) {
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
                 }
+
             }
 
             //Check S
             for (int i = y2; i > y1; i--) {
                 Tile checkTile = board.tiles[x1][i];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) {
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
         }
 
         if (y1 == y2) {
             //Check W
             for (int i = x2; i < x1; i++) {
                 Tile checkTile = board.tiles[i][y1];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) { // move not okay, return false
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
             //Check E
             for (int i = x2; i > x1; i--) {
                 Tile checkTile = board.tiles[i][y1];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) { // move not okay, return false
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
         }
 
         if (diffVert > 0 && diffHor > 0) {
             //Check SE
             for (int i = x2, j = y2; i > x1 && j > y1; i--, j--) {
                 Tile checkTile = board.tiles[i][j];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) { // move not okay, return false
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
         }
 
         if (diffHor < 0 && diffVert < 0) {
             //Check NW
             for (int i = x2, j = y2; i < x1 && j < y1; i++, j++) {
                 Tile checkTile = board.tiles[i][j];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) { // move not okay, return false
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
         }
 
         if (diffHor > 0 && diffVert < 0) {
             //Check NE
             for (int i = x2, j = y2; i > x1 && j < y1; i--, j++) {
                 Tile checkTile = board.tiles[i][j];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) { // move not okay, return false
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
         }
 
         if (diffHor < 0 && diffVert > 0) {
             //Check SW
             for (int i = x2, j = y2; i < x1 && j > y1; i++, j--) {
                 Tile checkTile = board.tiles[i][j];
-                if (!piece.isMoveOk(t1, checkTile)) {
+                if (!piece.isMoveOk(t1, checkTile) || isFriendly(t1, checkTile)) { // move not okay, return false
                     return false;
                 }
-                if (checkEnemy(t1, checkTile)) {
+                if (isEnemy(t1, checkTile)) {
                     enemy = checkTile;
-                }
-            }
+                }            }
         }
 
         if (enemy != null) { //If we have an enemy, and the enemy is not on the move-to tile, return false.
@@ -213,9 +206,7 @@ public class Game {
         return true;
     }
 
-    boolean checkEnemy(Tile t1, Tile checkTile) {
-        //ObstructedMove helper-function. Checks if Tile is an enemy
-        //Could probably use "isNullMove()", but that might be hard to understand as reader
+    boolean isEnemy(Tile t1, Tile checkTile) {
         if (checkTile.getPiece() != null) {
             return checkTile.getPiece().getIsWhite() != t1.getPiece().getIsWhite();
         }
