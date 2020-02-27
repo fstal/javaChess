@@ -1,8 +1,9 @@
 package com.company;
 
-public abstract class ChessPiece {
+public abstract class ChessPiece extends Game{
     private boolean white;
     private String name;
+    //private Game game;
 
     public ChessPiece(boolean white, String name) {
         this.white = white;
