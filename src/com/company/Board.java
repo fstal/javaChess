@@ -23,11 +23,12 @@ public class Board extends JFrame implements ActionListener {
         blackKingTile = tiles[4][0];
     }
 
-    Board(Game game, Tile[][] tiles, Tile bkt, Tile wkt) {
+    Board(Game game, Tile[][] tiles, Tile wkt, Tile bkt) {
         this.tiles = tiles;
         this.game = game;
         whiteKingTile = wkt;
         blackKingTile = bkt;
+        game.setBoard(this);
     }
 
     public void newGame() {
@@ -99,9 +100,11 @@ public class Board extends JFrame implements ActionListener {
         }
     }
 
-    void checkForCheck(boolean isWhiteTurn) {
+    public Tile getWhiteKingTile() {return whiteKingTile;}
+    public Tile getBlackKingTile() {return blackKingTile;}
 
-
+    boolean checkForCheck(boolean isWhiteTurn) {
+        // Checks for check for the provided color (true => white, false => black)
         Tile kingTile = isWhiteTurn ? whiteKingTile : blackKingTile;
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
@@ -109,11 +112,13 @@ public class Board extends JFrame implements ActionListener {
                 if (t.getPiece() != null && (t.getPiece().getIsWhite() != isWhiteTurn)) { // tile has piece and is enemy
                     if (t.getPiece().isMoveOk(t, kingTile) && game.obstructedMove(t, kingTile)) {
                         System.out.println("Your king is currently in check!");
+                        return true;
                     }
                 }
 
             }
         }
+        return false;
     }
 
     void checkForCheckmate() {

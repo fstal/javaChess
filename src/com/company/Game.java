@@ -31,7 +31,7 @@ public class Game {
         //has a selected tile
         else if (selectedTile != null) {
             if (obstructedMove(selectedTile, tile)) {
-                //Oddly worded? obstructedMove currently returns true if not obstructed?
+                //Oddly worded? obstructedMove currently returns true if not obstructed
                 movePiece(selectedTile, tile);
             }
             updateSelectedTile(null);
@@ -40,18 +40,11 @@ public class Game {
 
     void movePiece(Tile t1, Tile t2) {
         ChessPiece piece = t1.getPiece();
-        //Board boardClone = Board.deepClone(board);
-        //System.out.println(boardClone.tiles);
 
-        /////
-        //if (kingIsChecked) {
-            // copy tiles to futureTiles variable without reference
-            // do in the futureTiles 2d array:
-            //  movePiece(t1, t2)
-            // checkforcheck while still your turn or change color for checkforcheck
-            // if still check, INVALID MOVE, otherwise proceed as usual
-        //}
-        /////
+        // Needed in order to revert move
+        String p1Name = piece.getName();
+        String p2Name = t2.getPiece() == null ? "null" : t2.getPiece().getName(); // its just a "null" string for a moment, as createPieceFromName expects a string
+
         if (piece.getName().equals("pawn")) {
             handlePawnMove(t2, (Pawn) piece);
         }
@@ -62,9 +55,21 @@ public class Game {
             }
         }
         t1.setPiece(null);
-        t1.updateIcon();
-        t2.updateIcon();
-        endTurn();
+
+        if(board.checkForCheck(isWhiteTurn)) { // checks for check for whoever's turn it currently is
+            System.out.println(p1Name);
+            System.out.println(p2Name);
+            t1.setPiece(ChessPiece.createPieceFromName(p1Name, isWhiteTurn));
+            t2.setPiece(ChessPiece.createPieceFromName(p2Name, !isWhiteTurn));
+            System.out.println("INVALID MOVE: That move puts your king in check.");
+        }
+        else {
+
+            t1.updateIcon();
+            t2.updateIcon();
+            endTurn();
+        }
+
     }
 
     void handlePawnMove(Tile t2, Pawn piece) {
