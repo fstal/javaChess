@@ -7,6 +7,7 @@ public class Game {
     private Boolean isWhiteTurn = true;
     private Tile selectedTile = null;
     private Board board = null;
+    private boolean kingIsChecked = false;
 
     Game() {
         setTheme();
@@ -19,6 +20,7 @@ public class Game {
     void endTurn() {
         isWhiteTurn = !isWhiteTurn;
         board.setTurnLabel(isWhiteTurn);
+        board.checkForCheck(isWhiteTurn);
     }
 
     void clickTile(Tile tile) {
@@ -29,6 +31,7 @@ public class Game {
         //has a selected tile
         else if (selectedTile != null) {
             if (obstructedMove(selectedTile, tile)) {
+                //Oddly worded? obstructedMove currently returns true if not obstructed?
                 movePiece(selectedTile, tile);
             }
             updateSelectedTile(null);
@@ -37,11 +40,26 @@ public class Game {
 
     void movePiece(Tile t1, Tile t2) {
         ChessPiece piece = t1.getPiece();
+        //Board boardClone = Board.deepClone(board);
+        //System.out.println(boardClone.tiles);
+
+        /////
+        //if (kingIsChecked) {
+            // copy tiles to futureTiles variable without reference
+            // do in the futureTiles 2d array:
+            //  movePiece(t1, t2)
+            // checkforcheck while still your turn or change color for checkforcheck
+            // if still check, INVALID MOVE, otherwise proceed as usual
+        //}
+        /////
         if (piece.getName().equals("pawn")) {
             handlePawnMove(t2, (Pawn) piece);
         }
         else {
             t2.setPiece(t1.getPiece());
+            if (piece.getName().equals("king")) {
+                board.updateKingTile(t2);
+            }
         }
         t1.setPiece(null);
         t1.updateIcon();
@@ -205,6 +223,10 @@ public class Game {
             return enemy.getYPos() == t2.getYPos() && enemy.getXPos() == t2.getXPos();
         }
         return true;
+    }
+
+    public boolean getIsWhiteTurn() {
+        return isWhiteTurn;
     }
 
     public static boolean isFriendly(Tile t1, Tile t2) {        // Both isFriendly() and isEnemy() necessary as it can also be null. isFriendly() != isEnemy()

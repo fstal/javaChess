@@ -4,18 +4,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 
 public class Board extends JFrame implements ActionListener {
     Tile[][] tiles;
     int size = 8;
     private JLabel turnLabelWhite, turnLabelBlack;
+    private Tile whiteKingTile;
+    private Tile blackKingTile;
+
     Game game;
 
     Board(Game game) {
         this.tiles = new Tile[size][size];
         this.game = game;
         newGame();
+        whiteKingTile = tiles[4][7];
+        blackKingTile = tiles[4][0];
+    }
+
+    Board(Game game, Tile[][] tiles, Tile bkt, Tile wkt) {
+        this.tiles = tiles;
+        this.game = game;
+        whiteKingTile = wkt;
+        blackKingTile = bkt;
     }
 
     public void newGame() {
@@ -79,6 +91,35 @@ public class Board extends JFrame implements ActionListener {
         game.clickTile((Tile) e.getSource());
     }
 
+    void updateKingTile(Tile t) {
+        if (t.getPiece().getIsWhite()) {
+            whiteKingTile = t;
+        } else {
+            blackKingTile = t;
+        }
+    }
+
+    void checkForCheck(boolean isWhiteTurn) {
+
+
+        Tile kingTile = isWhiteTurn ? whiteKingTile : blackKingTile;
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                Tile t = tiles[x][y];
+                if (t.getPiece() != null && (t.getPiece().getIsWhite() != isWhiteTurn)) { // tile has piece and is enemy
+                    if (t.getPiece().isMoveOk(t, kingTile) && game.obstructedMove(t, kingTile)) {
+                        System.out.println("Your king is currently in check!");
+                    }
+                }
+
+            }
+        }
+    }
+
+    void checkForCheckmate() {
+
+    }
+
     void setupTurnLabels() {
         turnLabelWhite = new JLabel("White", SwingConstants.CENTER);
         turnLabelWhite.setBackground(Color.WHITE);
@@ -100,6 +141,19 @@ public class Board extends JFrame implements ActionListener {
         turnLabelWhite.setVisible(isWhiteTurn);
         turnLabelBlack.setVisible(!isWhiteTurn);
     }
+
+    public Tile[][] deepCopyBoard() {
+        // Should return a deep clone of the board
+        Tile[][] tilesClone = new Tile[tiles.length][];
+        for (int r = 0; r < tiles.length; r++) {
+            tilesClone[r] = tiles[r].clone();
+        }
+        return tilesClone;
+    }
+
+
+
+
 }
 
 
