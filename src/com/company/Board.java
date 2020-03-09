@@ -122,7 +122,7 @@ public class Board extends JFrame implements ActionListener {
     }
 
     void checkForCheckmate() {
-
+        // To be implemented if necessary?
     }
 
     void setupTurnLabels() {
@@ -149,16 +149,13 @@ public class Board extends JFrame implements ActionListener {
 
     public Tile[][] deepCopyBoard() {
         // Should return a deep clone of the board
+        // First implemented as an alternative way of checking for check
         Tile[][] tilesClone = new Tile[tiles.length][];
         for (int r = 0; r < tiles.length; r++) {
             tilesClone[r] = tiles[r].clone();
         }
         return tilesClone;
     }
-
-
-
-
 }
 
 
@@ -215,7 +212,7 @@ class Tile extends JButton {
         return posY;
     }
 
-    void setDefaultColor() { //Rename to "setDefaultColor"?
+    void setDefaultColor() { 
         if ((posY % 2) == 0) {
             this.setBackground(((posX % 2) != 0) ? Color.GRAY : Color.WHITE);
         } else {

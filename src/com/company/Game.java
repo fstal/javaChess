@@ -7,7 +7,6 @@ public class Game {
     private Boolean isWhiteTurn = true;
     private Tile selectedTile = null;
     private Board board = null;
-    private boolean kingIsChecked = false;
 
     Game() {
         setTheme();
@@ -40,15 +39,31 @@ public class Game {
 
     void movePiece(Tile t1, Tile t2) {
         ChessPiece piece = t1.getPiece();
+        ChessPiece piece2 = t2.getPiece();
 
-        // Needed in order to revert move
+        // Storing pieces in order to revert move in case of check
         String p1Name = piece.getName();
         String p2Name = t2.getPiece() == null ? "null" : t2.getPiece().getName(); // its just a "null" string for a moment, as createPieceFromName expects a string
 
+        /*
+        // Special case for preserving pawn's isFirstMove through reverting moves
+        boolean pawn1FirstMove = true;
+        boolean pawn2FirstMove = true;
+        if(piece.getName().equals("pawn")) {
+            Pawn pawn = (Pawn) piece;
+            pawn1FirstMove = pawn.getIsFirstMove();
+        }
+        else if (piece2.getName().equals("pawn")) {
+            Pawn pawn = (Pawn) piece;
+            pawn2FirstMove = pawn.getIsFirstMove();
+        }
+         */
+
+        // Special interactions for kings and pawns
+        // Could split into own function
         if (piece.getName().equals("pawn")) {
             handlePawnMove(t2, (Pawn) piece);
-        }
-        else {
+        } else {
             t2.setPiece(t1.getPiece());
             if (piece.getName().equals("king")) {
                 board.updateKingTile(t2);
@@ -56,20 +71,16 @@ public class Game {
         }
         t1.setPiece(null);
 
-        if(board.checkForCheck(isWhiteTurn)) { // checks for check for whoever's turn it currently is
-            System.out.println(p1Name);
-            System.out.println(p2Name);
+        // Check if current player puts him/her-self in check, if true, reverse last move
+        if (board.checkForCheck(isWhiteTurn)) { // checks for check for whoever's turn it currently is
             t1.setPiece(ChessPiece.createPieceFromName(p1Name, isWhiteTurn));
             t2.setPiece(ChessPiece.createPieceFromName(p2Name, !isWhiteTurn));
             System.out.println("INVALID MOVE: That move puts your king in check.");
-        }
-        else {
-
+        } else {    // Else, update icons and end turn
             t1.updateIcon();
             t2.updateIcon();
             endTurn();
         }
-
     }
 
     void handlePawnMove(Tile t2, Pawn piece) {
@@ -94,6 +105,7 @@ public class Game {
     }
 
     void updatePossibleMoves(Tile t, boolean b) {
+        // Logic for marking possible moves for a selected piece
         for (int y = 0; y < board.size; y++) {
             for (int x = 0; x < board.size; x++) {
                 Tile toTile = board.tiles[x][y];
@@ -228,10 +240,6 @@ public class Game {
             return enemy.getYPos() == t2.getYPos() && enemy.getXPos() == t2.getXPos();
         }
         return true;
-    }
-
-    public boolean getIsWhiteTurn() {
-        return isWhiteTurn;
     }
 
     public static boolean isFriendly(Tile t1, Tile t2) {        // Both isFriendly() and isEnemy() necessary as it can also be null. isFriendly() != isEnemy()

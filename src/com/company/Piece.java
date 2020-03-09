@@ -83,7 +83,7 @@ class Rook extends ChessPiece {
 
 class Pawn extends ChessPiece {
     static String name = "pawn";
-    boolean isFirstMove = true;
+    private boolean isFirstMove = true;
 
     public Pawn(boolean white) {
         super(white, name);
@@ -108,6 +108,10 @@ class Pawn extends ChessPiece {
         else {
             return ((y2 == y1 + sign) && x2 == x1 - 1) || ((y2 == y1 + sign) && x2 == x1 + 1);
         }
+    }
+
+    public boolean getIsFirstMove() {
+        return isFirstMove;
     }
 
     public void setIsFirstMove() {

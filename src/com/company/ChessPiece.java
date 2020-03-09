@@ -23,7 +23,7 @@ public abstract class ChessPiece implements Serializable {
 
     public static ChessPiece createPieceFromName(String name, boolean isWhite) {
         // Well aware this should probably be made with the factory pattern within its constructors instead
-        // Will have to do for now for solving the revertMove();
+        // Will have to do for now for solving reverting last move
         switch(name) {
             case "rook": return new Rook(isWhite);
             case "bishop": return new Bishop(isWhite);
@@ -35,6 +35,5 @@ public abstract class ChessPiece implements Serializable {
                 return null;
         }
     }
-
 }
 
