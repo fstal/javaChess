@@ -9,10 +9,9 @@ import java.io.*;
 public class Board extends JFrame implements ActionListener {
     Tile[][] tiles;
     int size = 8;
-    private JLabel turnLabelWhite, turnLabelBlack;
+    private JLabel turnLabelWhite, turnLabelBlack, messageLabel;
     private Tile whiteKingTile;
     private Tile blackKingTile;
-
     Game game;
 
     Board(Game game) {
@@ -78,6 +77,7 @@ public class Board extends JFrame implements ActionListener {
         }
 
         setupTurnLabels();
+        setupMessageLabel();
         setLayout(new GridLayout(size + 1, size));
         getContentPane().setBackground(Color.lightGray);
         setVisible(true);
@@ -146,6 +146,19 @@ public class Board extends JFrame implements ActionListener {
         turnLabelWhite.setVisible(isWhiteTurn);
         turnLabelBlack.setVisible(!isWhiteTurn);
     }
+
+
+    public void setupMessageLabel(){
+        messageLabel = new JLabel("Message Box", SwingConstants.CENTER);
+        messageLabel.setBackground(Color.WHITE);
+        messageLabel.setOpaque(true);
+        this.add(new JLabel()); //Empty tile
+        this.add(messageLabel);
+    }
+
+    public void setMessageLabel(String message){
+        messageLabel.setText("<html> <div style='text-align:center;'>" + message + "</div> </html>");
+
 
     public Tile[][] deepCopyBoard() {
         // Should return a deep clone of the board

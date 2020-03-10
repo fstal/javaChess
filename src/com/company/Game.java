@@ -23,6 +23,7 @@ public class Game {
     }
 
     void clickTile(Tile tile) {
+        informationMessage("");
         //no select tile, chosen tile not empty, piece on tile match player turn
         if (selectedTile == null && tile.piece != null && tile.getPiece().getIsWhite() == isWhiteTurn) {
             updateSelectedTile(tile);
@@ -32,6 +33,9 @@ public class Game {
             if (obstructedMove(selectedTile, tile)) {
                 //Oddly worded? obstructedMove currently returns true if not obstructed
                 movePiece(selectedTile, tile);
+            }
+            else{
+                informationMessage("WrongMove");
             }
             updateSelectedTile(null);
         }
@@ -258,6 +262,7 @@ public class Game {
 
     void promotePawn(Pawn piece, Tile t2) {
         t2.setPiece(new Queen(piece.getIsWhite()));
+        informationMessage("Promote", piece.getIsWhite());
     }
 
     void setTheme() {
@@ -278,4 +283,33 @@ public class Game {
             }
         }
     }
+
+    void informationMessage(String messageCase){
+        switch (messageCase){
+            case "WrongMove":
+                board.setMessageLabel("That move is not allowed. Try Again!");
+                break;
+            case "Checked":
+                board.setMessageLabel("You are in check! Move yourself out of check.");
+                break;
+            default:
+                board.setMessageLabel("");
+        }
+
+    }
+
+    void informationMessage(String messageCase, Boolean isWhite){
+        String color = (isWhite ? "White": "Black");
+        System.out.println(messageCase + " " + color);
+        switch (messageCase){
+            case "Check":
+                board.setMessageLabel("Player " + color + " is in check!");
+                break;
+            case "Promote":
+                board.setMessageLabel(color + " pawn is promoted to Queen!");
+                break;
+        }
+    }
+
+
 }
