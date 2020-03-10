@@ -3,7 +3,6 @@
 TODO:
 
 * Identifiera när ett drag medför att andra spelarens kung är hotad (schack) och meddela det.
-* Felmeddelanden vid felaktiga drag.
 ---------
 
 Projektförslag 4: Intelligent schackbräde
