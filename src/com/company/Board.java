@@ -111,7 +111,7 @@ public class Board extends JFrame implements ActionListener {
                 Tile t = tiles[x][y];
                 if (t.getPiece() != null && (t.getPiece().getIsWhite() != isWhiteTurn)) { // tile has piece and is enemy
                     if (t.getPiece().isMoveOk(t, kingTile) && game.obstructedMove(t, kingTile)) {
-                        System.out.println("Your king is currently in check!");
+                        game.informationMessage("Check", kingTile.getPiece().getIsWhite());
                         return true;
                     }
                 }
@@ -156,8 +156,9 @@ public class Board extends JFrame implements ActionListener {
         this.add(messageLabel);
     }
 
-    public void setMessageLabel(String message){
+    public void setMessageLabel(String message) {
         messageLabel.setText("<html> <div style='text-align:center;'>" + message + "</div> </html>");
+    }
 
 
     public Tile[][] deepCopyBoard() {

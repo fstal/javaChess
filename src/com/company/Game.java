@@ -79,7 +79,7 @@ public class Game {
         if (board.checkForCheck(isWhiteTurn)) { // checks for check for whoever's turn it currently is
             t1.setPiece(ChessPiece.createPieceFromName(p1Name, isWhiteTurn));
             t2.setPiece(ChessPiece.createPieceFromName(p2Name, !isWhiteTurn));
-            System.out.println("INVALID MOVE: That move puts your king in check.");
+            informationMessage("MoveToCheck");
         } else {    // Else, update icons and end turn
             t1.updateIcon();
             t2.updateIcon();
@@ -266,7 +266,9 @@ public class Game {
     }
 
     void setTheme() {
-        //Copied from StackOverflow
+        //From the Java documentation. Setting the theme of the program.
+        //Loops through all themes, if it finds Nimbus it selects it.
+        //UIManager requires try - except
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -275,12 +277,7 @@ public class Game {
                 }
             }
         } catch (Exception e) {
-            // If Nimbus is not available, fall back to cross-platform
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            System.out.println("Nimbus theme not available");
         }
     }
 
@@ -292,6 +289,9 @@ public class Game {
             case "Checked":
                 board.setMessageLabel("You are in check! Move yourself out of check.");
                 break;
+            case "MoveToCheck":
+                board.setMessageLabel("Invalid Move! That move puts your king in check!");
+                break;
             default:
                 board.setMessageLabel("");
         }
@@ -300,10 +300,9 @@ public class Game {
 
     void informationMessage(String messageCase, Boolean isWhite){
         String color = (isWhite ? "White": "Black");
-        System.out.println(messageCase + " " + color);
         switch (messageCase){
             case "Check":
-                board.setMessageLabel("Player " + color + " is in check!");
+                board.setMessageLabel(color + " king is in check!");
                 break;
             case "Promote":
                 board.setMessageLabel(color + " pawn is promoted to Queen!");
